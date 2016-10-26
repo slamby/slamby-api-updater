@@ -38,6 +38,10 @@ app.post('/', function (req, res) {
                         shell.exec(`docker-compose -f ${composeFilePath} up -d --remove-orphans`, function(code, stdout, stderr) {
                             if (code === 0) {
                                 responseObj.Log = stderr;
+
+                                //delete the old images from the vm
+                                shell.exec('docker rmi $(docker images -q)');
+
                                 res.status(200).send(responseObj);
                             } else {
                                 console.error(stderr);
