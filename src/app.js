@@ -25,7 +25,7 @@ app.post('/', function (req, res) {
             res.status(500).json(errorObj);
         }
         for (var i = 0, len = release.assets.length; i < len; i++) {
-            if (release.assets[i].name != "docker-compose.yml") continue;
+            if (release.assets[i].name != "docker-compose-wu.yml") continue;
             var composeFileUrl = release.assets[i].browser_download_url;
 
             var composeStream = fs.createWriteStream(composeFilePath);
@@ -37,7 +37,7 @@ app.post('/', function (req, res) {
                         var secret = `Slamby ${stdout.trim()}`;
                         var requestSecret = req.get("Authorization");
                         if (requestSecret == secret) {
-                            shell.exec(`docker-compose -f ${composeFilePath} up -d --remove-orphans`, function(code, stdout, stderr) {
+                            shell.exec(`docker-compose -f ${composeFilePath} up -d`, function(code, stdout, stderr) {
                                 if (code === 0) {
                                     responseObj.Log = stderr;
 
