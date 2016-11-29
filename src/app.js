@@ -11,6 +11,10 @@ const apiSecretSetting = 'SlambyApi__ApiSecret';
 
 process.env['COMPOSE_PROJECT_NAME'] = 'slamby';
 
+app.get('/', function (req, res) {
+    res.status(200).send("OK");
+});
+
 app.post('/', function (req, res) {
     var version = req.params['version']; 
     var client = github.client();
