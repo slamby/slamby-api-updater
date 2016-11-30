@@ -36,29 +36,22 @@ app.post('/', function (req, res) {
             request(composeFileUrl).pipe(composeStream);
 
             composeStream.on('close', function() {
-                shell.exec(`docker exec ${apiContainerName} printenv ${apiSecretSetting}`, {silent:true}, function(code, stdout, stderr) {
+                shell.exec(`docker ps`, {silent:true}, function(code, stdout, stderr) {
                     if (code === 0) {
-                        var secret = `Slamby ${stdout.trim()}`;
-                        var requestSecret = req.get("Authorization");
-                        if (requestSecret == secret) {
-                            shell.exec(`docker-compose -f ${composeFilePath} up -d`, function(code, stdout, stderr) {
-                                if (code === 0) {
-                                    responseObj.Log = stderr;
+                        shell.exec(`docker-compose -f ${composeFilePath} up -d`, function(code, stdout, stderr) {
+                            if (code === 0) {
+                                responseObj.Log = stderr;
 
-                                    //delete the old images from the vm
-                                    shell.exec('docker rmi $(docker images -q)');
+                                //delete the old images from the vm
+                                shell.exec('docker rmi $(docker images -q)');
 
-                                    res.status(200).send(responseObj);
-                                } else {
-                                    console.error(stderr);
-                                    errorObj.Errors.push(stderr);
-                                    res.status(500).json(errorObj);
-                                }
-                            });
-                        } else {
-                            console.error("Authentication failed!");
-                            res.status(401).send();
-                        }
+                                res.status(200).send(responseObj);
+                            } else {
+                                console.error(stderr);
+                                errorObj.Errors.push(stderr);
+                                res.status(500).json(errorObj);
+                            }
+                        });
                     } else {
                         console.error(stderr);
                         errorObj.Errors.push("The problem can be that the Slamby API container is not running!");
