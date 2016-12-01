@@ -56,6 +56,7 @@ app.post('/', function (req, res) {
                         if (code === 0) {
                             var inspectObj = JSON.parse(stdout);
                             if (inspectObj[0].Config.Env.length > 0){
+                                if (nativeObject.services.slambyapi["environment"] == undefined) nativeObject.services.slambyapi["environment"] = {};
                                 inspectObj[0].Config.Env.forEach(function(envVar) {
                                     if (envVar.startsWith(apiEnvVarPrefix)){
                                         var splitted = envVar.split("=");
