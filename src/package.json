@@ -1,6 +1,6 @@
 {
   "name": "slamby-api-updater",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Slamby API Updater",
   "main": "app.js",
   "scripts": {

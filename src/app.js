@@ -56,9 +56,9 @@ app.post('/', function (req, res) {
                         if (code === 0) {
                             var inspectObj = JSON.parse(stdout);
                             if (inspectObj[0].Config.Env.length > 0){
-                                if (nativeObject.services.slambyapi["environment"] == undefined) nativeObject.services.slambyapi["environment"] = {};
                                 inspectObj[0].Config.Env.forEach(function(envVar) {
                                     if (envVar.startsWith(apiEnvVarPrefix)){
+                                        if (nativeObject.services.slambyapi["environment"] == undefined) nativeObject.services.slambyapi["environment"] = {};
                                         var splitted = envVar.split("=");
                                         nativeObject.services.slambyapi["environment"][splitted[0]] = splitted[1];
                                         console.log(`Environment variable was added to the compose file: ${envVar}`);
